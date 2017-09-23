@@ -23,7 +23,6 @@
     "hapi": "^16.6.0",
     "inert": "^4.2.1",
     "mvdom": "^0.5.5",
-    "os-top": "0.0.4",
     "ts-node": "^3.3.0"
   },
   "devDependencies": {

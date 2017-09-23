@@ -1,20 +1,11 @@
 import { RouteConfiguration, Request, ReplyNoContinue } from 'hapi';
 
-// TODO: need to use the fake-top module soon and deprecreate the os-top (focus on demo, and not the hard problem of doing a top crossplatform)
-import * as top from "os-top";
-// import { fetch } from './fake-top';
+// This is just a fake os-top so that we can have it cross platform. This could be the mock of a real os-top
+import { memStat, cpuStat, processes, CpuStat, MemStat, Process } from './fake-top';
 
 
 const baseURI = "/api";
 
-
-async function wait(ms: number) {
-	return new Promise((resolve, reject) => {
-		setTimeout(() => {
-			resolve();
-		}, ms);
-	});
-}
 
 // --------- Usage APIs --------- //
 export const routes: RouteConfiguration[] = [];
@@ -64,9 +55,9 @@ var maxIdle = 3000; // time to stop the fetch if nobody is requesting the data
 var arrayLimit = 10;
 var delay = 1000; // delay in beteween top.fetch
 
-var cpuStats: any[] = [];
-var memStats: any[] = [];
-var procs: any[] = [];
+var cpuStats: CpuStat[] = [];
+var memStats: MemStat[] = [];
+var procs: Process[] = [];
 
 var on = false;
 
@@ -81,10 +72,9 @@ function touchLastRequested() {
 		console.log("os-usage.js - starting top.fetch every " + (delay / 1000) + "s");
 		topFetch();
 	}
-
 }
 
-function topFetch() {
+async function topFetch() {
 	var nowMs = new Date().getTime();
 
 	// if the lastRequested was > than maxIdel, then, we pause the loop
@@ -94,21 +84,27 @@ function topFetch() {
 		return;
 	}
 
-	top.fetch().then(function (data: any) {
-		_addData(cpuStats, data.stats.cpu);
-		_addData(memStats, data.stats.mem);
-		procs = data.procs;
-		// TODO: need to have the topCpuProcs and the topMemProcs
+	try {
 
-		setTimeout(topFetch, delay);
-	}).catch(function (ex: any) {
+		// we update the local data
+		_addData(cpuStats, await cpuStat());
+		_addData(memStats, await memStat());
+		procs = await processes();
+
+		// we wait
+		await wait(delay);
+
+		// we fetch again
+		topFetch();
+
+	} catch (ex) {
 		console.log("FAIL - top.fetch - " + ex);
-	});
+	}
 }
 
 
 // private function that add an new data item to its list, add time, max the list at usageLimit 
-function _addData(list: any, data: any) {
+function _addData<T>(list: T[], data: T & { time?: number }) {
 	const nowMs = new Date().getTime();
 
 	data.time = nowMs;
@@ -119,4 +115,11 @@ function _addData(list: any, data: any) {
 	}
 }
 
+
 // --------- /Data Capture --------- //
+
+async function wait(ms: number) {
+	return new Promise((resolve, reject) => {
+		setTimeout(() => resolve(), ms);
+	})
+}

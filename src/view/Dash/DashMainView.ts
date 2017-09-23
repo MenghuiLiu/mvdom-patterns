@@ -32,7 +32,7 @@ export class DashMainView extends BaseView {
 		// displays the Mem PieChart
 		var memPieCtnEl = first(this.el, ".mem-card .svg-ctn");
 		memPieCtnEl = guard(memPieCtnEl, "Cannot find container HTMLElement for '.cpu-card .cpu-chart-ctn'")
-		this._memPie = new UsagePie(["used", "unused"], ["#2196F3", "#4CAF50"])
+		this._memPie = new UsagePie(["used", "unused"], ["#2196F3", "#bbb"])
 			.init(memPieCtnEl)
 			.update({ used: 50, unused: 50 });
 	}
@@ -56,6 +56,8 @@ export class DashMainView extends BaseView {
 					return; // do nothing, next cycle we might have the data
 				}
 				var lastMeasure = data[data.length - 1];
+				lastMeasure.unused = lastMeasure.total - lastMeasure.used;
+
 				this._memPie!.update(lastMeasure);
 
 				let cEl = first(this.el, ".mem-card.summary");
