@@ -1,9 +1,12 @@
 {
 	"compilerOptions": {
 		/* Basic Options */
+		// BriteSnow Note: Here we are targeting es2015 because by default we target Edge and above. Another build could be made for IE11 when/if required
 		"target": "es2015",                       /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'. */
+		// BriteSnow Note: The module scheme targeted will be es2015, as rollup will be doing the packaging. For server, we will do 'commonjs'
 		"module": "es2015",                       /* Specify module code generation: 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
 		// "lib": [],                             /* Specify library files to be included in the compilation:  */
+		// BriteSnow Note: The strategy is to be strict .ts, and any .js should be considered as being part of any build workflow, probably only with rollup (e.g., src/lib-bundle.js)
 		"allowJs": false,                         /* Allow javascript files to be compiled. */
 		"checkJs": false,                         /* Report errors in .js files. */
 		// "jsx": "preserve",                     /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
@@ -11,6 +14,7 @@
 		"sourceMap": true,                        /* Generates corresponding '.map' file. */
 		// "outFile": "./",                       /* Concatenate and emit output to single file. */
 		"outDir": "./out/ts/",                    /* Redirect output structure to the directory. */
+		// BriteSnow Note: This is for the client source
 		"rootDir": "./src/",                      /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
 		// "removeComments": true,                /* Do not emit comments to output. */
 		// "noEmit": true,                        /* Do not emit outputs. */
@@ -19,6 +23,7 @@
 		// "isolatedModules": true,               /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
 
 		/* Strict Type-Checking Options */
+		// BriteSnow Note: To extract the maximum value out of TypeScript, we set strict = true, so that no implicit any, this, as well as null. Code is only better after the first pass. 
 		"strict": true,                            /* Enable all strict type-checking options. */
 
 		/* Additional Checks */
@@ -28,8 +33,9 @@
 		// "noFallthroughCasesInSwitch": true,    /* Report errors for fallthrough cases in switch statement. */
 
 		/* Module Resolution Options */
-		"moduleResolution": "node",               /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
-		// "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
+		// BriteSnow Note: THis is important so that other 3rd party modules that are on node.js, get picked up. 
+		"moduleResolution": "node"               /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
+		// "baseUrl": "./",                          /* Base directory to resolve non-absolute module names. */
 		// "paths": {},                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
 		// "rootDirs": [],                        /* List of root folders whose combined content represents the structure of the project at runtime. */
 		// "typeRoots": [],                       /* List of folders to include type definitions from. */
@@ -43,7 +49,7 @@
 		// "inlineSources": true,                 /* Emit the source alongside the sourcemaps within a single file; requires '--inlineSourceMap' or '--sourceMap' to be set. */
 
 		/* Experimental Options */
-		"experimentalDecorators": true            /* Enables experimental support for ES7 decorators. */
+		// "experimentalDecorators": true         /* Enables experimental support for ES7 decorators. */
 		// "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
 	},
 	// since we do an exclude, we need to be precise about the include (otherwise it will try to compile any .ts even some in the sub modules)  
