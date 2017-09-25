@@ -1,4 +1,4 @@
-import { BaseView, addHubEvents } from "../base";
+import { BaseView, addHubEvents } from "ts/base";
 import { on, remove } from "mvdom";
 import { render } from "../ts/render";
 

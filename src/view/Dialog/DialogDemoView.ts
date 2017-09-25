@@ -1,4 +1,4 @@
-import { BaseView, addDomEvents } from '../../base';
+import { BaseView, addDomEvents } from 'ts/base';
 import { display, first } from 'mvdom';
 import { BaseDialog } from './BaseDialog';
 import { SimpleDialog } from './SimpleDialog';

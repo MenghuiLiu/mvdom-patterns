@@ -1,6 +1,6 @@
 // This still use the "./lib" module to load the required library, making "./lib" the single point for external libraries.
-import { View } from "mvdom"
-import { render } from "./ts/render";
+import { View } from 'mvdom'
+import { render } from 'ts/render';
 
 export type EventBindings = { [selector: string]: (evt?: Event) => void };
 export type HubBindings = { [selector: string]: (data?: any, info?: any) => void };

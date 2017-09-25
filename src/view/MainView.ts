@@ -1,11 +1,11 @@
-import { BaseView, addHubEvents } from "../base";
-import { display, all, first, empty } from "mvdom";
-import { HomeView } from "./HomeView";
-import { TodoMainView } from "./Todo/TodoMainView";
-import { DashMainView } from "./Dash/DashMainView";
-import { PostrMainView } from "./Postr/PostrMainView";
-import { NotificationView } from "./NotificationView";
-import { DialogDemoView } from "./Dialog/DialogDemoView";
+import { BaseView, addHubEvents } from 'ts/base';
+import { display, all, first, empty } from 'mvdom';
+import { HomeView } from './HomeView';
+import { TodoMainView } from './Todo/TodoMainView';
+import { DashMainView } from './Dash/DashMainView';
+import { PostrMainView } from './Postr/PostrMainView';
+import { NotificationView } from './NotificationView';
+import { DialogDemoView } from './Dialog/DialogDemoView';
 
 type BaseViewClass = { new(): BaseView; }
 

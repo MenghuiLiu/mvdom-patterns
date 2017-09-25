@@ -1,6 +1,6 @@
-import { BaseView, addDomEvents } from '../../base';
+import { BaseView, addDomEvents } from 'ts/base';
 import { remove, first, append } from 'mvdom';
-import { render } from '../../ts/render';
+import { render } from 'ts/render';
 
 
 export class BaseDialog extends BaseView {

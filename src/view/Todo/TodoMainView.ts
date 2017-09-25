@@ -1,9 +1,9 @@
-import { BaseView, addDomEvents, addHubEvents } from "../../base";
+import { BaseView, addDomEvents, addHubEvents } from 'ts/base';
 import { hub, append, all, first, prev, next, pull } from "mvdom";
-import { guard, entityRef } from "../../ts/utils";
-import { dso } from "../../ts/ds";
-import { route } from "../../ts/route";
-import { render } from "../../ts/render";
+import { guard, entityRef } from "ts/utils";
+import { dso } from "ts/ds";
+import { route } from "ts/route";
+import { render } from "ts/render";
 
 var todoDso = dso("Todo");
 

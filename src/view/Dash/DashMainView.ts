@@ -1,9 +1,9 @@
-import { BaseView } from "../../base";
+import { BaseView } from 'ts/base';
 import { first, append, push } from "mvdom";
-import { ajax } from "../../ts/ajax";
-import { render } from "../../ts/render";
-import { scheduler } from "../../ts/scheduler";
-import { dic, guard } from "../../ts/utils";
+import { ajax } from "ts/ajax";
+import { render } from "ts/render";
+import { scheduler } from "ts/scheduler";
+import { dic, guard } from "ts/utils";
 import { UsageChart } from "./UsageChart";
 import { UsagePie } from "./UsagePie";
 

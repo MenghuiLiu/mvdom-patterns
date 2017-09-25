@@ -1,4 +1,4 @@
-import { BaseView } from "../base";
+import { BaseView } from 'ts/base';
 
 export class HomeView extends BaseView {
 

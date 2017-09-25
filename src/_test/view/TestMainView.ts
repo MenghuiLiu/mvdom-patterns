@@ -1,5 +1,5 @@
-import { BaseView, addHubEvents } from "../../base";
-import { all, first, display, empty } from "mvdom";
+import { BaseView, addHubEvents } from 'ts/base';
+import { all, first, display, empty } from 'mvdom';
 
 export class TestMainView extends BaseView {
 	path0?: string;
