@@ -22,9 +22,9 @@
 		"strict": true,
 
 		// same as with browser, need to use 3rd party modules
-		"moduleResolution": "node"
+		"moduleResolution": "node",
 
 		// TODO: need to add the baseURL (check if it works with VSCode, meaning, that vscode use this tsconfig and not the root config)
-		// "baseUrl": "./"                           /* Base directory to resolve non-absolute module names. */
+		"baseUrl": "./"                           /* Base directory to resolve non-absolute module names. */
 	}
 }

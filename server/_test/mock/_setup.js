@@ -12,8 +12,8 @@ mockery.warnOnUnregistered(false);
 //       With tsc (easy, tsconfig), node (probably with module-alias), 
 //       VSCode (not sure how, because it does not seem to follow tsconfig)
 const mockBar = require("./mock-bar");
-mockery.registerMock("../bar", mockBar);
-mockery.registerMock("./bar", mockBar);
+mockery.registerMock("bar", mockBar);
+// mockery.registerMock("./bar", mockBar); // if we want to catch this as well.
 // --------- /Mockery Way --------- //
 
 
