@@ -64,6 +64,7 @@ npm run watch
     - `src/` all of the code for the server
     - `mocha.opts` are the mocha command lines arguments for server testing
     - `tsconfig.json` for server typescript compilation (will be used by ts-node)
+  - `scripts` This is where we have our build script, `build.js`
 - build system
   - client: Rollup/Typescript2, postcss, and handlebars (gulp-free, webpack-free)
   - server: We use `ts-node` on the server, and therefore there are no really build step on the server. Could still run `tsc` from the `server/` folder to look at the outputted js, but their are not taken in account by `ts-node` (so, purely informative)
