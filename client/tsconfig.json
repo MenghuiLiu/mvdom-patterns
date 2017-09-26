@@ -14,7 +14,7 @@
 
 		// This is just to check the code once in a while to check the tsc output with a raw "ts". 
 		// "npm run build" will use rollup and does not need the .js to be emitted.
-		"outDir": "./out/ts/", /* Redirect output structure to the directory. */
+		"outDir": "./out/", /* Redirect output structure to the directory. */
 
 		// This is the root dir for the client code
 		"rootDir": "./src/", /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */

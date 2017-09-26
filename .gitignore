@@ -10,27 +10,24 @@ npm-debug.log
 # tmp/ might be used by the mock-server to store some data. 
 tmp/
 
-# dev/ is where we put some developer peorsonal notes or data about this project
-dev/
+# Personal developer notes
+_notes/
 
 #
-out/
+server/out/
+client/out/
 
 # this is a personal developer sandbox. We do not commit it. 
 src/view/Sandbox/
 
 # prevent the output files to be checked in 
-web/js/*.js
-web/css/*.css
-web/test/*.js
-web/test/*.css
+client/web/js/*.js
+client/web/css/*.css
+client/web/test/*.js
+client/web/test/*.css
 
 # prevent the .map
 *.map
 
 # Ignore .vscode
 .vscode/
-
-# Ignore Sublime Text files
-*.sublime-project
-*.sublime-workspace

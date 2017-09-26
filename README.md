@@ -43,27 +43,35 @@ npm run watch
 ## What's in
 
 - UI Screens
-    -  Home
-    -  Todo MVC
-    -  Dashboard (works on Linux and Mac right now, use os-top to get os data, will support Windows soon)
+  -  Home
+  -  Todo MVC
+  -  Dashboard (works on Linux and Mac right now, use os-top to get os data, will support Windows soon)
 - Code structure (simple but scalable). 
-    - web/ is the output dir.
-    - src/ are the source files to be compiled into web/ folder.
-    - src/view structure view components.
-    - Three output files app-bundle.js (app code), lib-bundle.js (3rd party lib), all-bundle.css.
+  - `client/`
+    - `web/` folder to be run by the server, with the files to be servered to browser, including the four following compiled files.
+        - `client/web/js/app-bundle.js` (app code, rollup/typescript2 of `src/**/*.ts`)
+        -  `client/web/js/lib-bundle.js` (rollup of `src/lib-bundle.js`)
+        -  `client/web/js/templates.js` (all of the handlebars template pre-compiled.    
+        -  `client/web/css/all-bundle.css` (all of the `src/**/*.pcss`
+    - `src/` source file 
+      - `lib-bundle.js` We split the 3rd party libs from the app bundle. (using rollup for both) 
+      - `view/` for all of the view .ts, .pcss, and .tmpl (mvdom views)
+      - `pcss/` common postcss
+      - `elem/` small .pcss / .ts component elements.
+      - `ts/` for all of the utils, service, common typescript functionalities.
+      - `tsconfig.json` for client typescript compilation. 
+  - `server/`
+    - `src/` all of the code for the server
+    - `mocha.opts` are the mocha command lines arguments for server testing
+    - `tsconfig.json` for server typescript compilation (will be used by ts-node)
 - build system
-    - gulp-less build with (browserify, postcss, handlebars precompilation)
+  - client: Rollup/Typescript2, postcss, and handlebars (gulp-free, webpack-free)
+  - server: We use `ts-node` on the server, and therefore there are no really build step on the server. Could still run `tsc` from the `server/` folder to look at the outputted js, but their are not taken in account by `ts-node` (so, purely informative)
 - App Patterns
-    -  Simple but scalable (i.e. distributed) routing system & navigation.
-    -  CSS Flexbox app layout.
-    -  Simpler "scheduler.js" system to schedule task on a view level or manually. 
+  -  Simple but scalable (i.e. distributed) routing system & navigation.
+  -  CSS Flexbox app layout.
+  -  Simpler "scheduler.js" system to schedule task on a view level or manually. 
 
 ## What's next
 
-- Dashboard for Windows (os-top will use wmic to mimic linux/osx top)
-- Graph on Dashboard
-- Add TodoMVC module (first with a client in memory management).
-- More CSS Flexbox patterns.
-    - Form / fields patterns.
-    - Continue table layout with flexbox (scrolling, resizing, ...).
-- DataService layer (ds.js) with matching mock-server API (for TodoMVC).
+- Implement `remoteDSO` on the client, and `api/crud` on the server

@@ -13,10 +13,10 @@
 		"sourceMap": true,                        /* Generates corresponding '.map' file. */
 
 		// Since we are using ts-node, this is used only to check the js output when we do a "tsc", but won't be used for running code. 
-		"outDir": "../out/server-ts/",                    /* Redirect output structure to the directory. */
+		"outDir": "./out/",                    /* Redirect output structure to the directory. */
 
 		// This point to the "server/"
-		"rootDir": "./",
+		"rootDir": "./src/",
 
 		// strict is the best way to extract the most value from TypeScript
 		"strict": true,
@@ -25,6 +25,6 @@
 		"moduleResolution": "node",
 
 		// TODO: need to add the baseURL (check if it works with VSCode, meaning, that vscode use this tsconfig and not the root config)
-		"baseUrl": "./"                           /* Base directory to resolve non-absolute module names. */
+		"baseUrl": "./src/"                           /* Base directory to resolve non-absolute module names. */
 	}
 }

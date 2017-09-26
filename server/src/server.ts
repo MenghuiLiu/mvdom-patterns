@@ -23,7 +23,7 @@ export interface Config {
 var defaultCfg: Config = {
 	//host: 'localhost',    // connection host (if we do this, it won't work when deploy in another host)
 	port: 8080,			    // connection port
-	clientRoot: process.cwd() + '/web/', // root of the client files (which will be served statically)	
+	clientRoot: process.cwd() + '/client/web/', // root of the client files (which will be served statically)	
 	routes: { // his is for cors
 		cors: {
 			origin: ['*'],
@@ -57,7 +57,7 @@ class Server {
 			handler: {
 				directory: {
 					path: (request: any) => {
-						console.log(' > ' + new Date().getTime() + ' ' + request.method.toUpperCase() + ' ' + request.path);
+						console.log(' > ' + new Date().getTime() + ' ' + request.method.toUpperCase() + ' ' + request.path, this.cfg.clientRoot);
 						return this.cfg.clientRoot;
 					},
 					listing: true,
