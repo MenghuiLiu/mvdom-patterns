@@ -16,27 +16,31 @@
 		// "npm run build" will use rollup and does not need the .js to be emitted.
 		"outDir": "./out/", /* Redirect output structure to the directory. */
 
-		// This is the root dir for the client code
-		"rootDir": "./src/", /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+		// We point the root dir to the parent to include ../common/ (and we will exclude server/)
+		"rootDir": "../",
 
 		// To extract the maximum value from TypeScript, we use strict = true (no implicit, null check, ...)
-		"strict": true, /* Enable all strict type-checking options. */
-
+		"strict": true, 
 
 		// This is important to support 3rd party modules that are still in a node.js/commonjs way
 		"moduleResolution": "node", 
 
 		// This allow to have relative path in the import, rather than "import ... "../../ts/ajax" we can do "ts/ajax"
-		"baseUrl": "./src/" /* Base directory to resolve non-absolute module names. */
+		"baseUrl": "./src/", 
+		"paths": {
+			"common/*": ["../../common/*"]
+		}
 	},
 
 	// We want more control about which code we will compile and exclude
 	"include": [
-		"src/**/*"
+		"./src/**/*.ts",
+		"../common/**/*.ts"
 	],
 
 	"exclude": [
 		"node_modules",
+		"server", // we exclude server
 		".rpt2_cache" // this folder will be created by the rollup-typescript2, so, need to exlude it, can become confusing.
 	]
 }

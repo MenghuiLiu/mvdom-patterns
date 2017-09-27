@@ -261,7 +261,11 @@ function refreshList(this: TodoMainView) {
 
 	todoDso.list({ filter: filter }).then((todos: any) => {
 		if (todos) {
-			append(this.itemsEl, render("TodoMainView-todo-items", { items: todos }), "empty");
+			let newEl = render("TodoMainView-todo-items", { items: todos });
+			if (newEl) {
+				append(this.itemsEl, newEl, "empty");
+			}
+
 		}
 	});
 }

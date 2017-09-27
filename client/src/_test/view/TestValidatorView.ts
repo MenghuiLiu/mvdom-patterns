@@ -1,4 +1,3 @@
-// import { mvdom as d, View } from "../../lib";
 import { validator } from "ts/validator";
 
 

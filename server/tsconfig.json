@@ -3,20 +3,20 @@
 		// for node.js 8.4+, we can output to 2017 (Allow to have native async/await and all)
 		"target": "es2017",
 
-		// node.js does not support es2015, so, we tell typescript to output commonjs
+		// node.js does not support es2015, so, we tell typescript to output commonjs (we do not use rollup for server, just ts-node)
 		"module": "commonjs",
 		
-		// same aas browser code, .js will be used 1% for gluing things together, no need to type it. 
-		"allowJs": false,                         /* Allow javascript files to be compiled. */
-		"checkJs": false,                         /* Report errors in .js files. */
+		// same as browser code, .js will be used 1% for gluing things together, no need to type it. 
+		"allowJs": false,
+		"checkJs": false,
 
-		"sourceMap": true,                        /* Generates corresponding '.map' file. */
+		"sourceMap": false,  // we do not need the sourcemap for server
 
 		// Since we are using ts-node, this is used only to check the js output when we do a "tsc", but won't be used for running code. 
-		"outDir": "./out/",                    /* Redirect output structure to the directory. */
+		"outDir": "./out/",  /* Redirect output structure to the directory. */
 
-		// This point to the "server/"
-		"rootDir": "./src/",
+		// This point to the "../" so that we can include common/
+		"rootDir": "../",  
 
 		// strict is the best way to extract the most value from TypeScript
 		"strict": true,
@@ -25,6 +25,22 @@
 		"moduleResolution": "node",
 
 		// TODO: need to add the baseURL (check if it works with VSCode, meaning, that vscode use this tsconfig and not the root config)
-		"baseUrl": "./src/"                           /* Base directory to resolve non-absolute module names. */
-	}
+		"baseUrl": "./src/",  /* Base directory to resolve non-absolute module names. */
+		"paths": {
+			"common/*": ["../../common/*"]
+		}
+	},
+
+	// We want more control about which code we will compile and exclude
+	"include": [
+		"./src/**/*.ts", // we take all of the server code
+		"../common/**/*.ts" // plus the common/ code
+	],
+
+	// Excluding 
+	"exclude": [
+		"node_modules",
+		"client", // we exclude the client code
+		".rpt2_cache" // this folder will be created by the rollup-typescript2, so, need to exlude it, can become confusing.
+	]
 }
