@@ -8,7 +8,7 @@ import { makeEntityStore, EntityStore, EntityDictionary } from '../../../common/
  * The file-entity-store is a simple file based entity store. 
  * It store each enity type in its own json, and assume `.id: number` as identifier. 
  */
-export const entityManager: EntityStore = makeEntityStore({
+export const entityStore: EntityStore = makeEntityStore({
 
 	read: readEntityStore,
 
@@ -46,7 +46,7 @@ async function writeEntityStore(entityType: string, entityStore: EntityDictionar
 	if (!(await fs.pathExists(dir))) {
 		await fs.mkdirs(dir);
 	}
-
+	console.log("file-store.ts ", file, entityStore);
 	await fs.writeJson(file, entityStore, { spaces: 2 });
 }
 

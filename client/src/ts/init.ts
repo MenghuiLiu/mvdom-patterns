@@ -1,7 +1,7 @@
 import { empty, trigger, first } from "mvdom";
 import { ds } from "./ds";
 import { DsoMem } from "./dsoMem";
-import { ajax } from "./ajax"
+import { get } from "./ajax"
 
 /**
  * This module finish loading all of the assets (i.e. svg symbols) and triggers as "APP_LOADED". The APP_LOADED event will be listened in the 
@@ -24,7 +24,7 @@ ds.fallback(function (type) {
 
 // --------- Load svg icons --------- //
 // NOTE: We start the loading as soon as possible (before the DOMContentLoaded)
-var svgSymbolsPromise = ajax.get("/svg/sprite.svg", null, { contentType: "application/xml" });
+var svgSymbolsPromise = get("/svg/sprite.svg", null, { contentType: "application/xml" });
 // --------- /Load svg icons --------- //	
 
 

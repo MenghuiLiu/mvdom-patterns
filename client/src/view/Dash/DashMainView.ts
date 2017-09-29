@@ -1,6 +1,6 @@
 import { BaseView } from 'ts/base';
 import { first, append, push } from "mvdom";
-import { ajax } from "ts/ajax";
+import { get } from "ts/ajax";
 import { render } from "ts/render";
 import { scheduler } from "ts/scheduler";
 import { dic, guard } from "ts/utils";
@@ -48,7 +48,7 @@ export class DashMainView extends BaseView {
 		// memUsage 
 		{
 			performFn: () => {
-				return ajax.get("/api/memUsage");
+				return get("/api/memUsage");
 			},
 
 			receiveFn: (data: any) => {
@@ -72,7 +72,7 @@ export class DashMainView extends BaseView {
 		// topMem
 		{
 			performFn: () => {
-				return ajax.get("/api/topMemProcs");
+				return get("/api/topMemProcs");
 			},
 
 			// the performFn and receiveFn are added to the scheduler.js with this view instance as ctx (context)
@@ -103,7 +103,7 @@ export class DashMainView extends BaseView {
 		// cpuUsage 
 		{
 			performFn: () => {
-				return ajax.get("/api/cpuUsage");
+				return get("/api/cpuUsage");
 			},
 
 			receiveFn: (data: any) => {
@@ -124,7 +124,7 @@ export class DashMainView extends BaseView {
 		// topCpu
 		{
 			performFn: () => {
-				return ajax.get("/api/topCpuProcs");
+				return get("/api/topCpuProcs");
 			},
 
 			receiveFn: (data: any) => {

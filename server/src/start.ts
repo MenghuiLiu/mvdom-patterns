@@ -1,5 +1,7 @@
+require("./setup-module-aliases");
 
 import { server, Config } from './server';
+
 
 // get the eventual port from the argv
 var params = (process.argv.length >= 3) ? process.argv.slice(2) : [];

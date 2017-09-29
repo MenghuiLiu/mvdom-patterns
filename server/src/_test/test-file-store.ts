@@ -1,4 +1,4 @@
-import { entityManager } from 'store/file-store'; // in test file, for now, those this need be relative
+import { entityStore } from 'store/file-store'; // in test file, for now, those this need be relative
 import { join } from 'path';
 import { remove, readJson } from 'fs-extra';
 import { dataDir } from 'conf'; // works before mocked
@@ -22,7 +22,7 @@ describe('test-file-store', function () {
 	it('create', async function () {
 		// create the entity
 		let entityData = { name: "test-name-01", lastName: "test-lastName-01" };
-		let newEntity = await entityManager.create("user", entityData);
+		let newEntity = await entityStore.create("user", entityData);
 
 		// check that data != than new entity
 		assert.notEqual(newEntity, entityData, "entity created should not be same instance as entityData");
@@ -38,8 +38,8 @@ describe('test-file-store', function () {
 
 	it('create-and-get', async function () {
 		let entityData = { name: "test-name-02", lastName: "test-lastName-02" };
-		let entityCreated = await entityManager.create("user", entityData);
-		let entityFromStore = await entityManager.get("user", entityCreated.id!);
+		let entityCreated = await entityStore.create("user", entityData);
+		let entityFromStore = await entityStore.get("user", entityCreated.id!);
 
 		// both object should have the same properties
 		assert.deepStrictEqual(entityFromStore, entityCreated);

@@ -1,4 +1,4 @@
-import { ajax } from "./ajax";
+import * as ajax from "./ajax";
 import { Criteria } from 'common/criteria';
 
 // The 'ds' module is the DataService module which is the layer to access data. The pattern here is that, 

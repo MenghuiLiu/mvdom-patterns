@@ -13,9 +13,12 @@ tmp/
 # Personal developer notes
 _notes/
 
-#
+# compiled files
 server/out/
 client/out/
+
+# This is the eventual data
+_data/
 
 # this is a personal developer sandbox. We do not commit it. 
 src/view/Sandbox/

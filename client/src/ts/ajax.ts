@@ -5,27 +5,26 @@
 // Note: We start with just a minimalistic implementation, if more is needed, we can use some AJAX library while keeping the same
 // application APIs. 
 
-export module ajax {
-	// use for get and list
-	export function get(path: string, data?: any, opts?: any) {
-		return _ajax('GET', path, data, opts);
-	}
-
-	// use for create 
-	export function post(path: string, data?: any, opts?: any) {
-		return _ajax('POST', path, data, opts);
-	}
-
-	// use for update
-	export function put(path: string, data?: any, opts?: any) {
-		return _ajax('PUT', path, data, opts);
-	}
-
-	// use for delete
-	export function _delete(path: string, data?: any) {
-		return _ajax('DELETE', path, data, null);
-	}
+// use for get and list
+export function get(path: string, data?: any, opts?: any) {
+	return _ajax('GET', path, data, opts);
 }
+
+// use for create 
+export function post(path: string, data?: any, opts?: any) {
+	return _ajax('POST', path, data, opts);
+}
+
+// use for update
+export function put(path: string, data?: any, opts?: any) {
+	return _ajax('PUT', path, data, opts);
+}
+
+// use for delete
+export function delet(path: string, data?: any) {
+	return _ajax('DELETE', path, data, null);
+}
+
 
 
 var defaultOpts = {

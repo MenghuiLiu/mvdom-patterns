@@ -3,6 +3,8 @@ import * as Inert from 'inert';
 import { exec } from 'child_process';
 
 import { routes as osUsageRoutes } from './api/os-usage';
+import { routes as crudRoutes } from './api/crud';
+
 
 var isWin = /^win/.test(process.platform);
 
@@ -68,6 +70,7 @@ class Server {
 
 		// load the osUsage API routes
 		this.hapiServer.route(osUsageRoutes);
+		this.hapiServer.route(crudRoutes);
 	}
 
 	start() {
