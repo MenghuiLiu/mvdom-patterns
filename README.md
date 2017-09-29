@@ -73,11 +73,20 @@ npm run watch
   -  CSS Flexbox app layout.
   -  Simpler "scheduler.js" system to schedule task on a view level or manually. 
 
-#### File / Name conventions
+#### Folders / (files) naming conventions
 
-- Any folders/files starting with `~` are gitignore. This way, it is easy to create and recognize folders that should not get into the git. Developers can have a `~notes/` folder, unit test can create a `~tmp/test/...` folder, server can use `~data/` to store data, and tsconfig can simply be configured to output to `./~out`. 
-- Folders that start with `_` are type of folders that are not really needed to run, but more for testing for example. We do use the `src/_test` for the test code, and must be safe to remove for prod.
+Simple but useful naming convention. 
 
+- Any folders/files starting with `~` are `.gitignore`. This is a simple but efficient way to create and identify personal, testing, or runtime related folders that should not be in git. For example.
+  - `~test/...` used by the unit testing. Run `npm test` and this folder should get created.
+  - `~data/` which is created by the server when the user save data
+  - `client/~out` and `server/~out` that are created when optionally running `tsc` in those respective folders. 
+  - `~notes/` A developer could create a notes folder for this project.
+
+- Folders that start with `_` are folders that are not needed to run, but more for testing for example.
+  - `server/src/_test` are where the server typescript test files are. 
+
+Note: Usually, the `~folder/` should be in the root project, but some exception can be made, for example, for `client/~out` and `server/~out`, and they get convered by the `.gitignore` rule. 
 
 
 ## What's next
