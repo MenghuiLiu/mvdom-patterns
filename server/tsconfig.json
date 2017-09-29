@@ -13,7 +13,7 @@
 		"sourceMap": false,  // we do not need the sourcemap for server
 
 		// Since we are using ts-node, this is used only to check the js output when we do a "tsc", but won't be used for running code. 
-		"outDir": "./out/",  /* Redirect output structure to the directory. */
+		"outDir": "./~out/",  /* Redirect output structure to the directory. */
 
 		// This point to the "../" so that we can include common/
 		"rootDir": "../",  

@@ -73,6 +73,13 @@ npm run watch
   -  CSS Flexbox app layout.
   -  Simpler "scheduler.js" system to schedule task on a view level or manually. 
 
+#### File / Name conventions
+
+- Any folders/files starting with `~` are gitignore. This way, it is easy to create and recognize folders that should not get into the git. Developers can have a `~notes/` folder, unit test can create a `~tmp/test/...` folder, server can use `~data/` to store data, and tsconfig can simply be configured to output to `./~out`. 
+- Folders that start with `_` are type of folders that are not really needed to run, but more for testing for example. We do use the `src/_test` for the test code, and must be safe to remove for prod.
+
+
+
 ## What's next
 
 - Implement `remoteDSO` on the client, and `api/crud` on the server

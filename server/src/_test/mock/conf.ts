@@ -1,2 +1,2 @@
 
-export const dataDir = "../tmp/test/_data";
+export const dataDir = "../~tmp/test/_data";

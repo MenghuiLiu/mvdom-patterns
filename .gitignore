@@ -7,21 +7,10 @@ npm-debug.log
 # rollup typescript error
 .rpt2_cache/
 
-# tmp/ might be used by the mock-server to store some data. 
-tmp/
+# prevent all root folders and filenames starting with "~". By convension, they are local folders only
+# used for personal notes, data store, output dir, ...
+~*
 
-# Personal developer notes
-_notes/
-
-# compiled files
-server/out/
-client/out/
-
-# This is the eventual data
-_data/
-
-# this is a personal developer sandbox. We do not commit it. 
-src/view/Sandbox/
 
 # prevent the output files to be checked in 
 client/web/js/*.js
