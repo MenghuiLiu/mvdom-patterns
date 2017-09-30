@@ -1,6 +1,7 @@
 import { empty, trigger, first } from "mvdom";
 import { ds } from "./ds";
 import { DsoMem } from "./dsoMem";
+import { DsoRemote } from "./dsoRemote";
 import { get } from "./ajax"
 
 /**
@@ -13,9 +14,11 @@ import { get } from "./ajax"
 
 // --------- DataService Initialization --------- //
 // For the demo, we will have the Memory Dso fallback for any type the application might use. 	
-ds.fallback(function (type) {
-	return new DsoMem(type);
-});
+// ds.fallback(function (type) {
+// 	return new DsoMem(type);
+// });
+
+ds.register("Todo", new DsoRemote("Todo"));
 
 // For production, you might want to have some Entity DSO object that you would register as follow
 // ds.register("Task", new TaskDso());

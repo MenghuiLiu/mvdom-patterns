@@ -7,17 +7,17 @@
  *  - `{"stage;>": 1, "projectId": 123}: will select entities from projectId 123 AND stage > 1
  *  - `[{"projectId", 123}, {""}]
  **/
-export type Filter = { [name: string]: string | number | null };
+export type Filter = { [name: string]: string | number | boolean | null };
 
 /** Criteria used to select and order an entity query. Used dso.first and dso.list */
 export interface Criteria {
 	/** The offset where  */
-	offset: number,
+	offset?: number,
 	/** The limit of element to be returned */
-	limit: number,
+	limit?: number,
 
 	/** See type Filter and Filters */
-	filter: Filter | Filter[],
+	filter?: Filter | Filter[] | null,
 
 	/** 
 	 * NOT IMPLEMENTED YET: a comma delimited of properties to be sorted by. For example: 
@@ -25,5 +25,5 @@ export interface Criteria {
 	 * - "!title": order by .title desc
 	 * - "projectId, !id": order by projectId asc and id desc
 	 */
-	orderBy: string
+	orderBy?: string
 }

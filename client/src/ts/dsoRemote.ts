@@ -1,8 +1,8 @@
 import { hub } from 'mvdom';
 import { Dso, BaseEntity } from './ds';
 import { Criteria } from 'common/criteria';
-import { get, post, delet } from './ajax';
-import { entityMemManager } from './mem-store';
+import { get, post, patch, delet } from './ajax';
+import { memEntityStore } from './mem-store';
 
 /**
  * InMemory (browser) implementation of the DataService ("ds"). 
@@ -20,39 +20,49 @@ export class DsoRemote<E extends BaseEntity> implements Dso<E>{
 		this._type = type;
 	}
 
-	create(entity: E): Promise<E> {
+	create(entity: object): Promise<E> {
 		return post(`api/crud/${this._type}`, { data: entity }).then((result) => {
-			console.log("result", result);
-			return result.data as E;
+			const entity = result.data;
+			hub("dataHub").pub(this._type, "create", entity);
+			return entity as E;
 		});
 	}
 
-	update(id: number, entity: E): Promise<E> {
-		return entityMemManager.update(this._type, id, entity).then((updatedEntity) => {
-			hub('dataHub').pub(this._type, 'update', updatedEntity);
-
-			return updatedEntity as E;
+	list(criteria?: Criteria): Promise<E[]> {
+		return get(`api/crud/${this._type}`, criteria).then((response) => {
+			return response.data as Promise<E[]>;
 		});
-	}
-
-	get(id: number): Promise<E> {
-		return entityMemManager.get(this._type, id) as Promise<E>;
-	};
-
-	list(criteria: Criteria): Promise<E[]> {
-		return entityMemManager.list(this._type, criteria) as Promise<E[]>;
-	};
-
-	first(criteria: Criteria): Promise<E | null> {
-		return entityMemManager.first(this._type, criteria) as Promise<E | null>;
 	};
 
 	remove(id: number): Promise<boolean> {
-		return entityMemManager.remove(this._type, id).then((result) => {
+		return delet(`api/crud/${this._type}/${id}`).then((result) => {
 			hub("dataHub").pub(this._type, "delete", id);
-			return result;
-		})
+			return result.data;
+		});
 	};
+
+	update(id: number, data: object): Promise<E> {
+		return patch(`api/crud/${this._type}/${id}`, { data: data }).then((result) => {
+			var entity = result.data as E;
+			hub("dataHub").pub(this._type, "update", entity);
+			return entity;
+		});
+	}
+
+
+	get(id: number): Promise<E> {
+		return get(`api/crud/${this._type}/${id}`).then((result) => {
+			var entity = result.data as E;
+			return entity;
+		});
+	};
+
+	first(criteria?: Criteria): Promise<E | null> {
+		return this.list({ ...criteria, ...{ limit: 1 } }).then((list) => {
+			return (list.length > 0) ? list[0] as E : null;
+		});
+	};
+
 }
 
 

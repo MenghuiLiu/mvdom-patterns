@@ -25,6 +25,10 @@ export function delet(path: string, data?: any) {
 	return _ajax('DELETE', path, data, null);
 }
 
+// patch
+export function patch(path: string, data?: any) {
+	return _ajax('PATCH', path, data, null);
+}
 
 
 var defaultOpts = {
@@ -35,7 +39,7 @@ function _ajax(type: string, path: string, data?: any, opts?: any): Promise<any>
 	opts = Object.assign({}, defaultOpts, opts);
 
 	// if asBody is not defined
-	var asBody = (opts.asBody == null && (type === 'POST' || type === 'PUT'));
+	var asBody = (opts.asBody == null && (type === 'POST' || type === 'PUT' || type === 'PATCH'));
 
 	return new Promise(function (resolve, reject) {
 		var xhr = new XMLHttpRequest();

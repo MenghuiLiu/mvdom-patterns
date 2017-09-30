@@ -1,3 +1,3 @@
 
 
-export const dataDir = "./~_data";
+export const dataDir = "./~data";

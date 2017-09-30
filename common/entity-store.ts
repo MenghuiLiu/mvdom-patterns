@@ -25,8 +25,8 @@ export interface EntityStore {
 	create(type: string, data: object): Promise<AnyEntity>;
 	update(type: string, id: number, data: object): Promise<AnyEntity>;
 	get(type: string, id: number): Promise<AnyEntity | null>;
-	first(type: string, criteria: Criteria): Promise<AnyEntity | null>;
-	list(type: string, criteria: Criteria): Promise<AnyEntity[]>;
+	first(type: string, criteria?: Criteria): Promise<AnyEntity | null>;
+	list(type: string, criteria?: Criteria): Promise<AnyEntity[]>;
 	remove(type: string, id: number): Promise<boolean>
 }
 
@@ -80,13 +80,13 @@ class EntityStoreImpl implements EntityStore {
 		return (entity) ? Object.assign({}, entity as AnyEntity) : null;
 	}
 
-	async first(type: string, criteria: Criteria): Promise<AnyEntity | null> {
+	async first(type: string, criteria?: Criteria): Promise<AnyEntity | null> {
 		criteria = Object.assign({}, criteria, { limit: 1 });
 		let ls = await this.list(type, criteria);
 		return (ls && ls.length > 0) ? ls[0] : null;
 	}
 
-	async list(type: string, criteria: Criteria): Promise<AnyEntity[]> {
+	async list(type: string, criteria?: Criteria): Promise<AnyEntity[]> {
 		let tmpList: AnyEntity[] = [], list: AnyEntity[];
 
 		let entityStore = await this.storeProvider.read(type);

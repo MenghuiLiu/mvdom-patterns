@@ -23,8 +23,8 @@ export module ds {
 	}
 }
 
-export function dso(type: string): any {
-	var dso = dsoDic[type];
+export function dso(type: string): Dso<AnyEntity> {
+	var dso = dsoDic[type] as Dso<AnyEntity>;
 
 	// if no dso found, but we have a dsoFallback factory, then, we create it.
 	if (!dso && _dsoFallbackFn) {
@@ -40,21 +40,24 @@ export function dso(type: string): any {
 }
 
 export interface BaseEntity {
-	id?: number;
+	id: number;
 }
 
+export interface AnyEntity extends BaseEntity {
+	[prop: string]: any;
+}
 
 export interface Dso<E> {
 
-	create(entity: E): Promise<E>;
+	create(entity: object): Promise<E>;
 
-	update(id: number, entity: E): Promise<E>;
+	update(id: number, entity: object): Promise<E>;
 
 	get(id: number): Promise<E>;
 
-	list(criteria: Criteria): Promise<E[]>;
+	list(criteria?: Criteria): Promise<E[]>;
 
-	first(criteria: Criteria): Promise<E | null>;
+	first(criteria?: Criteria): Promise<E | null>;
 
 	remove(id: number): Promise<boolean>;
 }

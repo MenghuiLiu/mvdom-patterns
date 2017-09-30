@@ -16,9 +16,11 @@
 	.todos-card{
 		background: #fff;
 		width: 800px;
-		self-align: middle;
-		
-		@mixin elev-24;
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+
+		@mixin elev-24{};
 							
 		input.new-todo{
 			background: rgba(0, 0, 0, 0.003);
@@ -39,8 +41,10 @@
 		} /* input.new-todo */
 
 		.items{
-
+			flex: 1;
+			overflow: scroll;
 			/* Outermost : Todo */
+
 			.todo-item{
 				font-size: 24px;
 				color: $txt-light;
@@ -51,16 +55,16 @@
 				flex-direction: row;
 
 				.ctrl-check{
-					position: absolute;
+					position: relative;
 					border: solid 1px #ddd;
-					width: 32px;
+					width: 36px;
 					height: 32px;
 					border-radius: 32px;
 					margin: 15px;
 				}
 
 				label, input{
-					padding: 15px 60px 15px 64px;
+					padding: 15px 60px 15px 0px;
 				}
 
 				label{

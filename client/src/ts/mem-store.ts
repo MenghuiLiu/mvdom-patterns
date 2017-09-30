@@ -3,8 +3,8 @@ import { makeEntityStore, EntityStore, EntityDictionary } from "common/entity-st
 const stores: { [type: string]: EntityDictionary } = {};
 
 
-/** Make and export the entityManager */
-export const entityMemManager: EntityStore = makeEntityStore({
+/** Make and export the entityStore */
+export const memEntityStore: EntityStore = makeEntityStore({
 
 	read: readEntityStore,
 
