@@ -1,11 +1,11 @@
 import { BaseView, addDomEvents, addHubEvents } from 'ts/base';
 import { hub, append, all, first, prev, next, pull } from "mvdom";
-import { guard, entityRef } from "ts/utils";
-import { dso } from "ts/ds";
-import { route } from "ts/route";
-import { render } from "ts/render";
+import { guard, entityRef } from 'ts/utils';
+import { dso } from 'ts/ds';
+import { route } from 'ts/route';
+import { render } from 'ts/render';
 
-var todoDso = dso("Todo");
+var todoDso = dso('Todo');
 
 export class TodoMainView extends BaseView {
 	itemsEl: HTMLElement;
@@ -14,8 +14,8 @@ export class TodoMainView extends BaseView {
 	show?: string;
 
 	postDisplay() {
-		this.itemsEl = first(this.el, ".items")!;
-		this.newTodoIpt = first(this.el, "header .new-todo")!;
+		this.itemsEl = first(this.el, '.items')!;
+		this.newTodoIpt = first(this.el, 'header .new-todo')!;
 		this.newTodoIpt.focus();
 
 		refreshViewFromRoute.call(this);
@@ -23,11 +23,11 @@ export class TodoMainView extends BaseView {
 
 	// --------- HubEvents Binding --------- //
 	hubEvents = addHubEvents(this.hubEvents, {
-		"dataHub; Todo": (data: any, info: any) => {
+		'dataHub; Todo': (data: any, info: any) => {
 			refreshList.call(this);
 		},
 
-		"routeHub; CHANGE": (routeInfo: any) => {
+		'routeHub; CHANGE': (routeInfo: any) => {
 			refreshViewFromRoute.call(this);
 		}
 	});
@@ -36,7 +36,7 @@ export class TodoMainView extends BaseView {
 	// --------- Dom Event Bindings --------- //
 	events = addDomEvents(this.events, {
 		// all input - we disable the default Tab UI event handling, as it will be custom
-		"keydown; input": (evt: KeyboardEvent) => {
+		'keydown; input': (evt: KeyboardEvent) => {
 			if (evt.key === "Tab") {
 				evt.preventDefault();
 			}
@@ -45,25 +45,25 @@ export class TodoMainView extends BaseView {
 		// --------- new todo UI Events --------- //
 		// Handle the keyup on the input new-todo 
 		// enter to create new, and tab to go to first item in the list.
-		"keyup; input.new-todo": (evt: KeyboardEvent) => {
+		'keyup; input.new-todo': (evt: KeyboardEvent) => {
 			var inputEl = <HTMLInputElement>evt.target;
 
 			// press enter
-			if (evt.key === "Enter") {
+			if (evt.key === 'Enter') {
 				var val = inputEl.value.trim();
 				if (val.length > 0) {
 					todoDso.create({ subject: val }).then(function () {
 						inputEl.value = "";
 						// send to the notification
-						hub("notifHub").pub("notify", { type: "info", content: "<strong>New task created:</strong> " + val });
+						hub('notifHub').pub('notify', { type: 'info', content: '<strong>New task created:</strong> ' + val });
 					});
 				} else {
-					hub("notifHub").pub("notify", { type: "error", content: "<strong>ERROR:</strong> An empty task is not a task." });
+					hub('notifHub').pub('notify', { type: 'error', content: '<strong>ERROR:</strong> An empty task is not a task.' });
 				}
 			}
 			//press tab, make editable the first item in the list
-			else if (evt.key === "Tab") {
-				var todoEntityRef = entityRef(first(this.el!, ".items .todo-item")!);
+			else if (evt.key === 'Tab') {
+				var todoEntityRef = entityRef(first(this.el!, '.items .todo-item')!);
 				if (todoEntityRef) {
 					editTodo.call(this, todoEntityRef);
 				}
@@ -73,9 +73,9 @@ export class TodoMainView extends BaseView {
 
 		// --------- todo-item UI Events --------- //
 		// toggle check status
-		"click; .ctrl-check": (evt: MouseEvent) => {
-			var eRef = entityRef(evt.target, "Todo");
-			eRef = guard(eRef, "No entity reference found for " + evt.target);
+		'click; .ctrl-check': (evt: MouseEvent) => {
+			var eRef = entityRef(evt.target, 'Todo');
+			eRef = guard(eRef, 'No entity reference found for ' + evt.target);
 
 			// we toggle the done value (yes, from the UI state, as this is what the user intent)
 			var done = !eRef.el.classList.contains("todo-done");
@@ -83,37 +83,37 @@ export class TodoMainView extends BaseView {
 			// we update the todo vas the dataservice API. 
 			todoDso.update(eRef.id, { done: done }).then(function (newEntity: any) {
 				if (done) {
-					hub("notifHub").pub("notify", { type: "info", content: "<strong>Task done:</strong> " + newEntity.subject });
+					hub('notifHub').pub('notify', { type: 'info', content: '<strong>Task done:</strong> ' + newEntity.subject });
 				} else {
-					hub("notifHub").pub("notify", { type: "warning", content: "<strong>Task undone:</strong> " + newEntity.subject });
+					hub('notifHub').pub('notify', { type: 'warning', content: '<strong>Task undone:</strong> ' + newEntity.subject });
 				}
 			});
 		},
 
 		// double clicking on a label makes it editable
-		"dblclick; label": (evt: MouseEvent) => {
-			editTodo.call(this, entityRef(evt.target, "Todo"));
+		'dblclick; label': (evt: MouseEvent) => {
+			editTodo.call(this, entityRef(evt.target, 'Todo'));
 		},
 
 		// when the todo-item input get focus out (we cancel by default)
-		"focusout; .todo-item input": (evt: MouseEvent) => {
+		'focusout; .todo-item input': (evt: MouseEvent) => {
 			var view = this;
-			var eRef = entityRef(evt.target, "Todo");
-			eRef = guard(eRef, "No entity reference found for " + evt.target);
+			var eRef = entityRef(evt.target, 'Todo');
+			eRef = guard(eRef, 'No entity reference found for ' + evt.target);
 
 			// IMPORTANT: Here we check if the entityEl state is editing, if not we do nothing. 
 			//            Ohterwise, we might do the remove inputEl twice with the blur event flow of this element.
-			if (eRef.el.classList.contains("editing")) {
+			if (eRef.el.classList.contains('editing')) {
 				cancelEditing.call(view, eRef);
 			}
 		},
 
 		// when user type enter or tab in the todo-item input
-		"keyup; .todo-item input": (evt: KeyboardEvent) => {
+		'keyup; .todo-item input': (evt: KeyboardEvent) => {
 			var view = this;
 			var inputEl = evt.target;
-			var eRef = entityRef(inputEl, "Todo");
-			eRef = guard(eRef, "No entity reference found for " + evt.target);
+			var eRef = entityRef(inputEl, 'Todo');
+			eRef = guard(eRef, 'No entity reference found for ' + evt.target);
 			var s = ".items .todo-item[data-entity-id='" + eRef.id + "']";
 
 			switch (evt.key) {

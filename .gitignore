@@ -11,6 +11,8 @@ npm-debug.log
 # used for personal notes, data store, output dir, ...
 ~*
 
+# For now, we ignore the laydown.json
+laydown.json
 
 # prevent the output files to be checked in 
 client/web/js/*.js

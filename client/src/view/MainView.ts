@@ -10,11 +10,11 @@ import { DialogDemoView } from './Dialog/DialogDemoView';
 type BaseViewClass = { new(): BaseView; }
 
 var pathToView: { [name: string]: BaseViewClass } = {
-	"": HomeView,
-	"todo": TodoMainView,
-	"dash": DashMainView,
-	"postr": PostrMainView,
-	"dialog": DialogDemoView
+	'': HomeView,
+	'todo': TodoMainView,
+	'dash': DashMainView,
+	'postr': PostrMainView,
+	'dialog': DialogDemoView
 };
 
 
@@ -27,7 +27,7 @@ export class MainView extends BaseView {
 
 	// --------- HubEvents Binding --------- //
 	hubEvents = addHubEvents(this.hubEvents, {
-		"routeHub; CHANGE": (routeInfo: any) => {
+		'routeHub; CHANGE': (routeInfo: any) => {
 			displayView.call(this, routeInfo);
 		}
 	});
@@ -46,21 +46,21 @@ function displayView(this: MainView, routeInfo: any) {
 	// We change the subView only if the path0 is different
 	if (view.path0 !== path0) {
 		// Remove the eventual active
-		for (let itemEl of all(view.el, ".main-nav a.active")) {
+		for (let itemEl of all(view.el, '.main-nav a.active')) {
 			itemEl.classList.remove("active");
 		}
 
 		// activate the main-nav a link
-		var activeEl = first(view.el, ".main-nav a[href='#" + path0 + "']");
+		var activeEl = first(view.el, '.main-nav a[href="#' + path0 + '"]');
 		if (activeEl) {
-			activeEl.classList.add("active");
+			activeEl.classList.add('active');
 		}
 
 		// change the subview
 		var subViewClass = pathToView[path0];
 
 		// display the view (empty first)
-		var contentEl = first(view.el, ".main-content");
+		var contentEl = first(view.el, '.main-content');
 		empty(contentEl);
 		display(subViewClass, contentEl!);
 
