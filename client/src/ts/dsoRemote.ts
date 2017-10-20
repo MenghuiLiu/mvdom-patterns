@@ -1,8 +1,7 @@
 import { hub } from 'mvdom';
 import { Dso, BaseEntity } from './ds';
-import { Criteria } from 'common/criteria';
+import { QueryOptions } from 'common/query-options';
 import { get, post, patch, delet } from './ajax';
-import { memEntityStore } from './mem-store';
 
 /**
  * InMemory (browser) implementation of the DataService ("ds"). 
@@ -28,8 +27,8 @@ export class DsoRemote<E extends BaseEntity> implements Dso<E>{
 		});
 	}
 
-	list(criteria?: Criteria): Promise<E[]> {
-		return get(`api/crud/${this._type}`, criteria).then((response) => {
+	list(opts?: QueryOptions): Promise<E[]> {
+		return get(`api/crud/${this._type}`, opts).then((response) => {
 			return response.data as Promise<E[]>;
 		});
 	};
@@ -57,8 +56,8 @@ export class DsoRemote<E extends BaseEntity> implements Dso<E>{
 		});
 	};
 
-	first(criteria?: Criteria): Promise<E | null> {
-		return this.list({ ...criteria, ...{ limit: 1 } }).then((list) => {
+	first(opts?: QueryOptions): Promise<E | null> {
+		return this.list({ ...opts, ...{ limit: 1 } }).then((list) => {
 			return (list.length > 0) ? list[0] as E : null;
 		});
 	};

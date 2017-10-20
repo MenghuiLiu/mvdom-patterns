@@ -1,5 +1,5 @@
 import * as ajax from "./ajax";
-import { Criteria } from 'common/criteria';
+import { QueryOptions } from 'common/query-options';
 
 // The 'ds' module is the DataService module which is the layer to access data. The pattern here is that, 
 // the first param is the object type, which allows to have a single access points to data and start with dynamic/generic
@@ -55,9 +55,9 @@ export interface Dso<E> {
 
 	get(id: number): Promise<E>;
 
-	list(criteria?: Criteria): Promise<E[]>;
+	list(opts?: QueryOptions): Promise<E[]>;
 
-	first(criteria?: Criteria): Promise<E | null>;
+	first(opts?: QueryOptions): Promise<E | null>;
 
 	remove(id: number): Promise<boolean>;
 }

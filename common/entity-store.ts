@@ -1,6 +1,6 @@
-import { Criteria, Filter } from './criteria';
+import { QueryOptions, Filter } from './query-options';
 
-type AnyEntity = { id?: number };
+type AnyEntity = { id?: number, [prop: string]: any };
 
 
 export function makeEntityStore(storeRW: StoreRW): EntityStore {
@@ -25,8 +25,8 @@ export interface EntityStore {
 	create(type: string, data: object): Promise<AnyEntity>;
 	update(type: string, id: number, data: object): Promise<AnyEntity>;
 	get(type: string, id: number): Promise<AnyEntity | null>;
-	first(type: string, criteria?: Criteria): Promise<AnyEntity | null>;
-	list(type: string, criteria?: Criteria): Promise<AnyEntity[]>;
+	first(type: string, opts?: QueryOptions): Promise<AnyEntity | null>;
+	list(type: string, opts?: QueryOptions): Promise<AnyEntity[]>;
 	remove(type: string, id: number): Promise<boolean>
 }
 
@@ -80,13 +80,13 @@ class EntityStoreImpl implements EntityStore {
 		return (entity) ? Object.assign({}, entity as AnyEntity) : null;
 	}
 
-	async first(type: string, criteria?: Criteria): Promise<AnyEntity | null> {
-		criteria = Object.assign({}, criteria, { limit: 1 });
-		let ls = await this.list(type, criteria);
+	async first(type: string, opts?: QueryOptions): Promise<AnyEntity | null> {
+		opts = Object.assign({}, opts, { limit: 1 });
+		let ls = await this.list(type, opts);
 		return (ls && ls.length > 0) ? ls[0] : null;
 	}
 
-	async list(type: string, criteria?: Criteria): Promise<AnyEntity[]> {
+	async list(type: string, opts?: QueryOptions): Promise<AnyEntity[]> {
 		let tmpList: AnyEntity[] = [], list: AnyEntity[];
 
 		let entityStore = await this.storeProvider.read(type);
@@ -94,7 +94,7 @@ class EntityStoreImpl implements EntityStore {
 		let item;
 
 		// get the eventual filters
-		let filters = (criteria && criteria.filter) ? criteria.filter : null;
+		let filters = (opts && opts.filter) ? opts.filter : null;
 		if (filters) {
 			// make sure it is an array of filter
 			filters = (filters instanceof Array) ? filters : [filters];
@@ -118,18 +118,83 @@ class EntityStoreImpl implements EntityStore {
 		// tmpList.sort...
 
 		// extract the eventual offset, limit from the opts, or set the default
-		let offset = (criteria && criteria.offset) ? criteria.offset : 0;
-		let limit = (criteria && criteria.limit) ? criteria.limit : -1; // -1 means no limit
+		let offset = (opts && opts.offset) ? opts.offset : 0;
+		let limit = (opts && opts.limit) ? opts.limit : -1; // -1 means no limit
 
 		// Set the "lastIndex + 1" for the for loop
 		let l = (limit !== -1) ? (offset + limit) : tmpList.length;
 		// make sure the l is maxed out by the tmpList.length
 		l = (l > tmpList.length) ? tmpList.length : l;
 
+		// we build the final list (clone each object)
 		list = [];
 		for (let i = offset; i < l; i++) {
 			list.push(Object.assign({}, tmpList[i]));
 		}
+
+		// --------- Entity Join --------- //
+		// do the eventual join
+		const entityJoin = (opts != null) ? opts.entityJoin : null;
+
+		if (entityJoin) { // array of entityTypeName to join
+			for (const entityTypeToJoin of entityJoin) {
+				// get the entity store for the enityToJoin
+				const entityToJoinStore = await this.storeProvider.read(entityTypeToJoin);
+
+				const entityPropertyName = entityTypeToJoin.toLowerCase();
+				const entityPropertyIdName = entityPropertyName + 'Id';
+				// for all entity in the result list, we check if we have a 'entitytojoinId` property
+				for (const entity of list) {
+					const joinId: number = entity[entityPropertyIdName];
+					if (joinId != null) {
+						const joinedEntity = entityToJoinStore[joinId];
+						entity[entityPropertyName] = { ...joinedEntity }; // we clone to be safe (TODO: will need to do deep clone)
+					}
+				}
+			}
+		}
+		// --------- /Entity Join --------- //
+
+		// --------- Property Join --------- //
+		// do the eventual join
+		const propertyJoin = (opts != null) ? opts.propertyJoin : null;
+
+		if (propertyJoin) { // { [entityType: string]: propertyNames[] }
+			for (const entityTypeToJoin in propertyJoin) {
+				// get the entity store for the enityToJoin
+				const entityToJoinStore = await this.storeProvider.read(entityTypeToJoin);
+
+				// this make sure the entity name is lower case, e.g., Project' -> 'project'
+				const entityToJoinPropertyPrefix = entityTypeToJoin.toLowerCase();
+
+				// list all of the property names to join, and make the corresponding array of the names that will be added to each entity. 
+				// e.g., ['name'] and ['projectName']
+				const joinedEntityPropertyNames = propertyJoin[entityTypeToJoin]; // this is the 'name'
+				const entityPropertyNames = joinedEntityPropertyNames.map((n) => { // this wiill be 'projectName'
+					return entityToJoinPropertyPrefix + upperCaseFirst(n);
+				});
+
+				const entityPropertyName = entityTypeToJoin.toLowerCase();
+				const entityPropertyIdName = entityPropertyName + 'Id';
+
+				// now that we prepared the data, we can go through the list of items and add the joined properties
+				for (const entity of list) {
+					const joinId: number = entity[entityPropertyIdName];
+					if (joinId != null) {
+						const joinedEntity: any = entityToJoinStore[joinId];
+
+						// now list the joinProperty 
+						for (let i = 0; i < joinedEntityPropertyNames.length; i++) {
+							const joinedEntityPropertyName = joinedEntityPropertyNames[i];
+							const entityPropertyName = entityPropertyNames[i];
+							entity[entityPropertyName] = joinedEntity[joinedEntityPropertyName]
+						}
+					}
+				}
+
+			}
+		}
+		// --------- /Property Join --------- //
 
 		return list;
 	}
@@ -150,6 +215,11 @@ class EntityStoreImpl implements EntityStore {
 
 
 // --------- Utils --------- //
+
+/** Upper case the property name ('project' becomes 'Project') */
+function upperCaseFirst(s: string) {
+	return s[0].toUpperCase() + s.slice(1);
+}
 
 /** Return the next sequence number (+1 of the max) */
 // TODO: Will need to make it more efficient by caching the max the first time, and then, just increment it (since everything go through the same code)

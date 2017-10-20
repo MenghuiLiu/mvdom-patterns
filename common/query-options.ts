@@ -9,8 +9,15 @@
  **/
 export type Filter = { [name: string]: string | number | boolean | null };
 
-/** Criteria used to select and order an entity query. Used dso.first and dso.list */
-export interface Criteria {
+/**
+ * The property name to join, by entity type name. 
+ * For example, `propertyJoin: {project: ['name']}` will create the appropriate `.projectName` for any entity that have the corresponding
+ * `.projectId`
+ */
+type PropertyJoin = { [entityType: string]: string[] };
+
+/** QueryOptions used to select and order an entity query. Used dso.first and dso.list */
+export interface QueryOptions {
 	/** The offset where  */
 	offset?: number,
 	/** The limit of element to be returned */
@@ -19,11 +26,16 @@ export interface Criteria {
 	/** See type Filter and Filters */
 	filter?: Filter | Filter[] | null,
 
+
 	/** 
 	 * NOT IMPLEMENTED YET: a comma delimited of properties to be sorted by. For example: 
 	 * - "title": order by .title asc
 	 * - "!title": order by .title desc
 	 * - "projectId, !id": order by projectId asc and id desc
 	 */
-	orderBy?: string
+	orderBy?: string;
+
+	entityJoin?: string[];
+
+	propertyJoin?: PropertyJoin;
 }

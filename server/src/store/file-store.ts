@@ -1,7 +1,6 @@
 import * as fs from 'fs-extra-plus';
 import * as path from 'path';
 import { dataDir } from 'conf';
-import { Criteria } from 'common/criteria';
 import { makeEntityStore, EntityStore, EntityDictionary } from '../../../common/entity-store';
 
 /**

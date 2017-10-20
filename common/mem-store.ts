@@ -4,7 +4,7 @@ const stores: { [type: string]: EntityDictionary } = {};
 
 
 /** Make and export the entityStore */
-export const memEntityStore: EntityStore = makeEntityStore({
+export const entityStore: EntityStore = makeEntityStore({
 
 	read: readEntityStore,
 

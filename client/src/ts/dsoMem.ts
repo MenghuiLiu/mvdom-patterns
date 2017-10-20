@@ -1,7 +1,7 @@
 import { hub } from 'mvdom';
 import { Dso, BaseEntity } from './ds';
-import { Criteria } from 'common/criteria';
-import { memEntityStore } from './mem-store';
+import { QueryOptions } from 'common/query-options';
+import { entityStore } from 'common/mem-store';
 
 /**
  * InMemory (browser) implementation of the DataService ("ds"). 
@@ -20,7 +20,7 @@ export class DsoMem<E extends BaseEntity> implements Dso<E>{
 	}
 
 	create(entity: E): Promise<E> {
-		return memEntityStore.create(this._type, entity).then((createdEntity) => {
+		return entityStore.create(this._type, entity).then((createdEntity) => {
 			// we publish the dataservice event
 			hub('dataHub').pub(this._type, 'create', createdEntity);
 			return createdEntity as E;
@@ -28,7 +28,7 @@ export class DsoMem<E extends BaseEntity> implements Dso<E>{
 	}
 
 	update(id: number, entity: E): Promise<E> {
-		return memEntityStore.update(this._type, id, entity).then((updatedEntity) => {
+		return entityStore.update(this._type, id, entity).then((updatedEntity) => {
 			hub('dataHub').pub(this._type, 'update', updatedEntity);
 
 			return updatedEntity as E;
@@ -36,19 +36,19 @@ export class DsoMem<E extends BaseEntity> implements Dso<E>{
 	}
 
 	get(id: number): Promise<E> {
-		return memEntityStore.get(this._type, id) as Promise<E>;
+		return entityStore.get(this._type, id) as Promise<E>;
 	};
 
-	list(criteria: Criteria): Promise<E[]> {
-		return memEntityStore.list(this._type, criteria) as Promise<E[]>;
+	list(opts: QueryOptions): Promise<E[]> {
+		return entityStore.list(this._type, opts) as Promise<E[]>;
 	};
 
-	first(criteria: Criteria): Promise<E | null> {
-		return memEntityStore.first(this._type, criteria) as Promise<E | null>;
+	first(opts: QueryOptions): Promise<E | null> {
+		return entityStore.first(this._type, opts) as Promise<E | null>;
 	};
 
 	remove(id: number): Promise<boolean> {
-		return memEntityStore.remove(this._type, id).then((result) => {
+		return entityStore.remove(this._type, id).then((result) => {
 			hub("dataHub").pub(this._type, "remove", id);
 			return result;
 		})
