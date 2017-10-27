@@ -10,14 +10,25 @@
 export type Filter = { [name: string]: string | number | boolean | null };
 
 /**
- * The property name to join, by entity type name. 
- * For example, `propertyJoin: {project: ['name']}` will create the appropriate `.projectName` for any entity that have the corresponding
- * `.projectId`
+ * The property name join declaration. For example
+ *  `'assignee': 'User.name'` will create the `.assigneeName` from the `User.name` property from on the `.assigneeId`
  */
-type PropertyJoin = { [entityType: string]: string[] };
+export type PropertyJoin = { [propertyNameBase: string]: string | string[] };
+
+/** Property name to join entity type name. The 'Id' suffix will be added to the propertyName to get the join entity ID. */
+export type EntityJoin = { [propertyName: string]: string }
+
+
+export interface JoinOptions {
+	entityJoin?: EntityJoin;
+
+	propertyJoin?: PropertyJoin;
+
+	resultFormat?: 'graph' | 'rel';
+}
 
 /** QueryOptions used to select and order an entity query. Used dso.first and dso.list */
-export interface QueryOptions {
+export interface QueryOptions extends JoinOptions {
 	/** The offset where  */
 	offset?: number,
 	/** The limit of element to be returned */
@@ -34,8 +45,4 @@ export interface QueryOptions {
 	 * - "projectId, !id": order by projectId asc and id desc
 	 */
 	orderBy?: string;
-
-	entityJoin?: string[];
-
-	propertyJoin?: PropertyJoin;
 }

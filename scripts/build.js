@@ -8,6 +8,7 @@ const { tmplFiles, pcssFiles, rollupFiles } = require("./processors.js");
 
 // Define the constant for this project (needs to be before the router...route())
 const rootDir = "./client/"; // here we assume we script will be run from the package.json dir
+const commonDir = path.join("./common/");
 const srcDir = path.join(rootDir, "src/");
 const webDir = path.join(rootDir, "web/");
 
@@ -98,7 +99,7 @@ async function watch() {
 
 	// NOTE: here we do not need to do await (even if we could) as it is fine to not do them sequentially. 
 
-	fs.watchDirs([srcDir], ".ts", () => app());
+	fs.watchDirs([srcDir, commonDir], ".ts", () => app());
 
 	fs.watchDirs(pcssSrcDirs, ".pcss", () => css());
 

@@ -1,44 +1,51 @@
+import { DocEntityStore, EntityDoc } from "common/doc-store";
 import * as fs from 'fs-extra-plus';
 import * as path from 'path';
 import { dataDir } from 'conf';
-import { makeEntityStore, EntityStore, EntityDictionary } from '../../../common/entity-store';
+
+
+class FileEntityStore extends DocEntityStore {
+	constructor() {
+		super({ read, readWrite });
+	}
+}
+
 
 /**
  * The file-entity-store is a simple file based entity store. 
  * It store each enity type in its own json, and assume `.id: number` as identifier. 
  */
-export const entityStore: EntityStore = makeEntityStore({
+export const entityStore = new FileEntityStore();
 
-	read: readEntityStore,
 
-	readWrite: async (entityType: string, beforeWrite: (entityStore: EntityDictionary) => Promise<any>) => {
-		// TODO: need to do a filelock or queue
-		let entityStore = await readEntityStore(entityType);
-		let r = await beforeWrite(entityStore);
-		await writeEntityStore(entityType, entityStore);
+async function readWrite(entityType: string, beforeWrite: (entityStore: EntityDoc) => Promise<any>) {
 
-		return r;
-	}
-});
+	// TODO: need to do a filelock or queue
 
+	let entityStore = await read(entityType);
+	let r = await beforeWrite(entityStore);
+	await writeEntityStore(entityType, entityStore);
+
+	return r;
+}
 
 // --------- FileStore Load & Write --------- //
 /** Load the json of an entity file. 
  * @returns resolve to the js object of the json file (if exists), or empty object.
  */
-async function readEntityStore(entityType: string): Promise<EntityDictionary> {
+async function read(entityType: string): Promise<EntityDoc> {
 	const file = entityFile(entityType);
 	let jsonObj = null;
 
 	if (await fs.pathExists(file)) {
 		return await fs.readJson(file);
 	} else {
-		return {};
+		return DocEntityStore.newEntityDoc();
 	}
 }
 
 /** Save the entity store for a given entity type */
-async function writeEntityStore(entityType: string, entityStore: EntityDictionary) {
+async function writeEntityStore(entityType: string, entityStore: EntityDoc) {
 	const file = entityFile(entityType);
 	const dir = path.dirname(file);
 

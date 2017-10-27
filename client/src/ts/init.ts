@@ -16,6 +16,7 @@ import { get } from "./ajax"
 // For the demo, we will have the Memory Dso fallback for any type the application might use. 	
 ds.fallback(function (type) {
 	return new DsoMem(type);
+	// return new DsoRemote(type); // this is for the file server store (turn off by default, but should be used in real app)
 });
 
 // This will use the file entity store with the crud API. All users same list for now. 

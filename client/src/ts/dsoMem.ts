@@ -20,15 +20,18 @@ export class DsoMem<E extends BaseEntity> implements Dso<E>{
 	}
 
 	create(entity: E): Promise<E> {
-		return entityStore.create(this._type, entity).then((createdEntity) => {
+		return entityStore.create(this._type, entity).then((resultEntity) => {
+			const createdEntity = resultEntity.data;
 			// we publish the dataservice event
-			hub('dataHub').pub(this._type, 'create', createdEntity);
+			hub('dataHub').pub(this._type, 'create', resultEntity.data);
 			return createdEntity as E;
 		});
 	}
 
 	update(id: number, entity: E): Promise<E> {
-		return entityStore.update(this._type, id, entity).then((updatedEntity) => {
+		return entityStore.update(this._type, id, entity).then((resultEntity) => {
+			const updatedEntity = resultEntity.data;
+
 			hub('dataHub').pub(this._type, 'update', updatedEntity);
 
 			return updatedEntity as E;
@@ -36,15 +39,24 @@ export class DsoMem<E extends BaseEntity> implements Dso<E>{
 	}
 
 	get(id: number): Promise<E> {
-		return entityStore.get(this._type, id) as Promise<E>;
+		return entityStore.get(this._type, id).then((resultEntity) => {
+			return resultEntity.data as E;
+		});
 	};
 
-	list(opts: QueryOptions): Promise<E[]> {
-		return entityStore.list(this._type, opts) as Promise<E[]>;
+	async list(opts: QueryOptions): Promise<E[]> {
+		const resultList = await entityStore.list(this._type, opts);
+		return resultList.data as E[];
 	};
 
-	first(opts: QueryOptions): Promise<E | null> {
-		return entityStore.first(this._type, opts) as Promise<E | null>;
+
+	async first(opts: QueryOptions): Promise<E | null> {
+		const result = await entityStore.first(this._type, opts);
+		if (result && result.data != null) {
+			return result.data as E;
+		} else {
+			return null;
+		}
 	};
 
 	remove(id: number): Promise<boolean> {

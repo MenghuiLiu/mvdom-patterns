@@ -1,8 +1,9 @@
-import { entityStore } from 'store/file-store'; // in test file, for now, those this need be relative
+import { entityStore } from 'store/file-store';
 import { join } from 'path';
 import { remove, readJson } from 'fs-extra';
-import { dataDir } from 'conf'; // works before mocked
+import { dataDir } from 'conf'; // in test, this will resolve to _test/mock/conf.ts
 import { resolve } from 'path';
+import { createTestDataSet } from './utils';
 import * as assert from 'assert';
 
 describe('test-file-store', function () {
@@ -17,35 +18,23 @@ describe('test-file-store', function () {
 			throw new Error(`Directory not seems to be safe to remove: ${dir}`);
 		}
 
+		await createTestDataSet(entityStore);
 	})
 
-	it('create', async function () {
-		// create the entity
-		let entityData = { name: "test-name-01", lastName: "test-lastName-01" };
-		let newEntity = await entityStore.create("user", entityData);
 
-		// check that data != than new entity
-		assert.notEqual(newEntity, entityData, "entity created should not be same instance as entityData");
+	it('file-store-create', async function () {
+		let entityData = { name: 'test-name-01', lastName: 'test-lastName-01' };
+		let entityCreated = (await entityStore.create('User', entityData)).data;
 
-		// read from the store
-		let userStore = await readJson(join(dataDir, "user.json"));
-
-		// both object properties should be equal
-		assert.deepStrictEqual(userStore[newEntity.id!], newEntity);
-		// but the object instance should be different
-		assert.notEqual(userStore[newEntity.id!], newEntity);
-	});
-
-	it('create-and-get', async function () {
-		let entityData = { name: "test-name-02", lastName: "test-lastName-02" };
-		let entityCreated = await entityStore.create("user", entityData);
-		let entityFromStore = await entityStore.get("user", entityCreated.id!);
+		let entityFromStore = (await entityStore.get('User', entityCreated.id)).data;
 
 		// both object should have the same properties
 		assert.deepStrictEqual(entityFromStore, entityCreated);
 
 		// but instance should not be equal
 		assert.notEqual(entityFromStore, entityCreated);
-	})
+	});
 
 });
+
+

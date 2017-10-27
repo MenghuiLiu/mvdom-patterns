@@ -1,25 +1,28 @@
-import { makeEntityStore, EntityStore, EntityDictionary } from "common/entity-store";
+import { DocEntityStore, EntityDoc } from "common/doc-store";
 
-const stores: { [type: string]: EntityDictionary } = {};
+const stores: { [type: string]: EntityDoc } = {};
 
 
-/** Make and export the entityStore */
-export const entityStore: EntityStore = makeEntityStore({
-
-	read: readEntityStore,
-
-	readWrite: async function (entityType: string, beforeWrite: (entityStore: EntityDictionary) => Promise<any>) {
-		let entityStore = await readEntityStore(entityType);
-		let r = await beforeWrite(entityStore);
-		stores[entityType] = entityStore;
-		return r;
+class MemEntityStore extends DocEntityStore {
+	constructor() {
+		super({ read, readWrite })
 	}
+}
 
-});
+// export one instance (effectively, a "singleton")
+export const entityStore = new MemEntityStore();
 
-function readEntityStore(entityType: string): Promise<EntityDictionary> {
+
+async function readWrite(entityType: string, beforeWrite: (entityStore: EntityDoc) => Promise<any>) {
+	let entityStore = await read(entityType);
+	let r = await beforeWrite(entityStore);
+	stores[entityType] = entityStore;
+	return r;
+}
+
+function read(entityType: string): Promise<EntityDoc> {
 	return new Promise(function (resolve) {
 		var store = stores[entityType];
-		resolve(store || {});
+		resolve(store || DocEntityStore.newEntityDoc());
 	})
 }

@@ -1,6 +1,6 @@
 import { hub } from 'mvdom';
 import { Dso, BaseEntity } from './ds';
-import { QueryOptions } from 'common/query-options';
+import { QueryOptions } from "common/query-options";
 import { get, post, patch, delet } from './ajax';
 
 /**
@@ -29,7 +29,7 @@ export class DsoRemote<E extends BaseEntity> implements Dso<E>{
 
 	list(opts?: QueryOptions): Promise<E[]> {
 		return get(`api/crud/${this._type}`, opts).then((response) => {
-			return response.data as Promise<E[]>;
+			return response.data as E[];
 		});
 	};
 
@@ -56,7 +56,9 @@ export class DsoRemote<E extends BaseEntity> implements Dso<E>{
 		});
 	};
 
+	// NOTE: for now, we use the list to not create another crud/rest API to conform to the spec, but we might change that later.
 	first(opts?: QueryOptions): Promise<E | null> {
+		// for now, we use the 
 		return this.list({ ...opts, ...{ limit: 1 } }).then((list) => {
 			return (list.length > 0) ? list[0] as E : null;
 		});
