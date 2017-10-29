@@ -1,4 +1,6 @@
 import { RouteConfiguration, Request, ReplyNoContinue } from 'hapi';
+import { jsonDecode } from 'utils';
+import { QueryOptions } from 'common/query-options';
 
 import { entityStore } from '../store/file-store';
 
@@ -16,9 +18,10 @@ routes.push({
 	handler: async function (request: Request, reply: ReplyNoContinue) {
 		const type = request.params.type;
 
-		// TODO: need to support filters.
+		let queryOptions = jsonDecode(request.query.queryOptions) as QueryOptions | null;
 
-		const resultList = await entityStore.list(type);
+		const resultList = await entityStore.list(type, queryOptions);
+
 		reply(resultList);
 	}
 });
@@ -47,7 +50,6 @@ routes.push({
 		// get the values from the request
 		const type = request.params.type;
 		const requestData = (request.payload) ? request.payload.data : null;
-		console.log(`createing ${type}`, requestData);
 		// asserts params
 		if (requestData == null) {
 			throw new Error(`request to POST ${request.path} does not have any payload or data`);
@@ -55,7 +57,6 @@ routes.push({
 
 		// create the entity
 		const entityResult = await entityStore.create(type, requestData);
-		console.log(`created ${type}`, entityResult);
 		reply(entityResult);
 	}
 });

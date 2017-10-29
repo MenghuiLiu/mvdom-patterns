@@ -107,7 +107,7 @@ export class DocEntityStore implements EntityStore {
 		return { format, data };
 	}
 
-	async list(type: string, opts?: QueryOptions): Promise<ResultList> {
+	async list(type: string, opts?: QueryOptions | null): Promise<ResultList> {
 		const format = (opts && opts.resultFormat) ? opts.resultFormat : defaultResultFormat;
 
 		let tmpList: AnyEntity[] = [], list: AnyEntity[];

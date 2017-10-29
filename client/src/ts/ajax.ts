@@ -88,14 +88,33 @@ function _ajax(type: string, path: string, data?: any, opts?: any): Promise<any>
 	});
 }
 
-function param(object: any) {
+/** Build a URI query string from js object */
+function param(obj: any) {
 	var encodedString = '';
-	for (var prop in object) {
-		if (object.hasOwnProperty(prop)) {
+	for (var prop in obj) {
+		if (obj.hasOwnProperty(prop)) {
+
 			if (encodedString.length > 0) {
 				encodedString += '&';
 			}
-			encodedString += prop + '=' + encodeURIComponent(object[prop]);
+
+			let val = obj[prop];
+
+			// if no value (null or undefined), then, we ignore
+			if (val == null) {
+				continue;
+			}
+
+			// if the value is an object or array, then, we stringify (for serialization), base64 (for making it space efficient).
+			if (typeof val === 'object' || val instanceof Array) {
+				// stringify
+				val = JSON.stringify(val);
+				//base64
+				val = btoa(val);
+			}
+
+			// always uri encode the value (it will get decoded automatically on the server)
+			encodedString += prop + '=' + encodeURIComponent(val);
 		}
 	}
 	return encodedString;

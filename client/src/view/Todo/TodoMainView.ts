@@ -1,5 +1,5 @@
 import { BaseView, addDomEvents, addHubEvents } from 'ts/base';
-import { hub, append, all, first, prev, next, pull } from "mvdom";
+import { hub, append, empty, all, first, prev, next, pull } from "mvdom";
 import { guard, entityRef } from 'ts/utils';
 import { dso } from 'ts/ds';
 import { route } from 'ts/route';
@@ -259,13 +259,20 @@ function refreshList(this: TodoMainView) {
 			break;
 	}
 
-	todoDso.list({ filter: filter }).then((todos: any) => {
-		if (todos) {
-			let newEl = render("TodoMainView-todo-items", { items: todos });
-			if (newEl) {
-				append(this.itemsEl, newEl, "empty");
-			}
+	let queryOptions;
+	if (filter) {
+		queryOptions = { filter: filter };
+	}
 
+	todoDso.list(queryOptions).then((todos: any[]) => {
+		// Note: dso.list always return an array, empty if no match found. 
+		let newEl = render("TodoMainView-todo-items", { items: todos });
+		if (newEl) {
+			append(this.itemsEl, newEl, "empty");
+		}
+		// if no newEl was created, is because todos was empty
+		else {
+			empty(this.itemsEl);
 		}
 	});
 }

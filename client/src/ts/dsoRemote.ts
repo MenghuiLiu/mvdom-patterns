@@ -27,8 +27,11 @@ export class DsoRemote<E extends BaseEntity> implements Dso<E>{
 		});
 	}
 
-	list(opts?: QueryOptions): Promise<E[]> {
-		return get(`api/crud/${this._type}`, opts).then((response) => {
+	list(queryOptions?: QueryOptions): Promise<E[]> {
+
+		const data = (queryOptions) ? { queryOptions } : null;
+
+		return get(`api/crud/${this._type}`, data).then((response) => {
 			return response.data as E[];
 		});
 	};
