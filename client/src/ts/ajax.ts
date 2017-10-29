@@ -105,12 +105,10 @@ function param(obj: any) {
 				continue;
 			}
 
-			// if the value is an object or array, then, we stringify (for serialization), base64 (for making it space efficient).
+			// if the value is an object or array, then, we stringify (for serialization)
 			if (typeof val === 'object' || val instanceof Array) {
 				// stringify
 				val = JSON.stringify(val);
-				//base64
-				val = btoa(val);
 			}
 
 			// always uri encode the value (it will get decoded automatically on the server)

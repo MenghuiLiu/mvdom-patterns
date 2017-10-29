@@ -5,17 +5,15 @@ export function as(val: any, type: any) {
 }
 
 
-/** Decode a base64 json string into an object or array. 
- * @returns Return the json object or arry, or null if the base64Json is null or undefined 
+/** Decode a json string. Right now, jsut do a JSON.parse
+ * @returns Return the json object or array, or null if the base64Json is null or undefined 
  **/
-export function jsonDecode(base64Json: string | null | undefined): object | any[] | null {
-	// null proof function
-	if (base64Json == null) {
+export function jsonDecode(jsonString: string | null | undefined): object | any[] | null {
+	if (jsonString == null) {
 		return null;
 	}
 
-	const queryOptionsJsonString = Buffer.from(base64Json, 'base64').toString();
-	const val = JSON.parse(queryOptionsJsonString);
+	const val = JSON.parse(jsonString);
 	return val;
 }
 
