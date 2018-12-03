@@ -1,0 +1,51 @@
+@import "../../pcss/utils.pcss";
+
+.AddUserDialog{
+	@mixin elev-4{};
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-top: -250px;
+	margin-left: -250px;
+	width: 500px;
+	height: 500px;
+	display: flex;
+	flex-direction: column;
+	z-index: 100;
+	background: #fff;
+
+	header{
+		background: #ddd;
+		font-size: 18px;
+		font-weight: 200;
+		color: #333;
+		cursor: pointer;
+		display: flex;
+		
+		> .title{
+			padding: 8px;
+			flex: 1;
+		}
+		> i{
+			margin-top: 8px;
+			margin-right: 8px;
+			width: 16px;
+		}
+	}
+	section{
+		position: relative;
+		.content{
+			margin-top: 16px;
+			padding-left: 16px;
+		}
+		.resizer{
+			background: red;
+			cursor: pointer;
+			margin-top: 221px;
+			padding-left: 448px; 
+			width:20px;
+			height:20px;
+		}
+	}
+
+}

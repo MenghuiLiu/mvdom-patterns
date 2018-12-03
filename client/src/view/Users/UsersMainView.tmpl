@@ -1,0 +1,19 @@
+<script id="UsersMainView" type="text/html">
+	<div class="UsersMainView">
+		<div class="Users-card">
+			<div class="add">Add User</div>
+			<div class="users-list"></div>
+			</div>
+	</div>
+</script>
+
+<script id="UsersMainView-users-list" type="text/html">
+	{{#each users}}
+	<div class="item" data-entity-id='{{id}}' data-entity-name='{{name}}' data-entity-age='{{age}}'>
+			<div class="name">{{name}}</div>
+			<div class="age">{{age}}</div>
+			<div class="edit" data-entity-id='{{id}}'>edit</div>
+			<div class="delete" data-entity-id='{{id}}'>delete</div>
+	</div>
+	{{/each}}
+</script>

@@ -1,0 +1,32 @@
+.UsersMainView{
+		width: 620px;
+		height: 257px;
+		background: #fff;
+		border: 1px solid #eeeeee;
+	.Users-card{
+		padding: 8px 0px 0px 16px;
+		.add{
+			width: 125px;
+			height: 32px;
+			cursor: pointer;
+		}
+		.users-list{
+			width: 560px;
+			height: 200px;
+			padding: 0px 0px 0px 16px;
+			overflow: auto;
+			.item{
+				display:grid;
+				grid-template-columns: 1fr 1fr 1fr 1fr;
+				margin-bottom:16px;
+				.edit{
+					
+					cursor: pointer;
+				}
+				.delete{
+					cursor: pointer;
+				}
+			}
+		}
+	}
+}
